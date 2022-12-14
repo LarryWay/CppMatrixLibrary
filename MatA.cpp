@@ -8,9 +8,8 @@ struct SubMat{
 
     int* ptr;
     int size;
-    int cnt;
 
-    SubMat(int* p, int column_size) : ptr(p), size(column_size) { printf("SubMat created!\n");}
+    SubMat(int* p, int column_size) : ptr(p), size(column_size) { printf("SubMat created\n");}
 
     int operator[](int index){
         if(index >= size) { 
@@ -30,25 +29,27 @@ struct Matrix{
 
     std::array<int, r * c> m_Data;
 
+
+
     Matrix(){  // DEFAULT CONSTRUCTOR
         std::fill(m_Data.begin(), m_Data.end(), 0);
         printf("Default contructor\n");
     }
+
 
     Matrix(const Matrix<r,c>& m){  // COPY CONSTRUCTOR
         std::copy(m.m_Data.begin(), m.m_Data.end(), m_Data.begin());
         printf("Copy Constructor\n");
     }
 
-    Matrix(Matrix<r,c>&& m) : m_Data(std::move(m.m_Data)) {
-    } // TODO - MOVE CONSTRUCTOR
 
-    Matrix(const std::array<int, r * c>& arr){
+    Matrix(const std::array<int, r * c>& arr){  // COPY ARRAY CONSTRUCTOR
         std::copy(arr.begin(), arr.end(), m_Data.begin());
         printf("Copy Array\n");
     }
 
-    Matrix(std::initializer_list<std::array<int, c>>&& ini){
+
+    Matrix(std::initializer_list<std::array<int, c>>&& ini){  // INITIALIZER_LIST CONSTRUCTOR
         if(ini.size() != r){ printf("Invalid Size\n");}
 
         int pos = 0;
@@ -58,43 +59,55 @@ struct Matrix{
                 pos++;
             }
         }
-       
-
+        
+        printf("Initialize_list constructor\n");
     }
+
+
+    Matrix(Matrix<r,c>&& m) = delete;  // DELETED MOVE CONSTRUCTOR
+
 
     ~Matrix(){printf("Deleted\n");}
 
-    Matrix& operator=(const Matrix<r,c>& m){
+
+    Matrix& operator=(const Matrix<r,c>& m){  // COPY ASSIGNMENT OPERATOR
         std::copy(m.m_Data.begin(), m.m_Data.end(), m_Data.begin());
-        printf("Copy operator\n");
+        printf("copy assignment\n");
         return *this;
-        
     } 
 
-    Matrix& operator=(Matrix<r,c>&& m){
-        delete m_Data;
-        m_Data = m.m_Data;
-        m.m_Data = nullptr;
-        printf("Move operator\n");
-        return *this;
-        
 
-    }
+    Matrix& operator=(Matrix<r,c>&& m) = delete;  // DELTED MOVE OPERATOR
+
 
     Matrix operator+(const Matrix<r,c>& m) {
         std::array<int, r * c> tempArr;
         for(int x = 0 ; x < (r * c) ; x++){
             tempArr[x] = m.m_Data[x] + m_Data[x];
         }
-        return Matrix<r,c>{tempArr};
+        Matrix<r,c> returnMatrix{tempArr};
+        return returnMatrix;
     } 
-
 
 
     SubMat operator[](int index){
         if(index >= r){printf("BAD ROW SIZE\n");}
         return SubMat((&m_Data[0] + (r * index)), c);
     }
+
+
+    size_t size(){
+        return (r * c);
+    }
+
+    int rows(){
+        return r;
+    }
+
+    int cols(){
+        return c;
+    }
+
 
 
 };
