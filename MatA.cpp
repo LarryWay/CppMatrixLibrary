@@ -41,8 +41,7 @@ struct Matrix{
     }
 
     Matrix(Matrix<r,c>&& m) : m_Data(std::move(m.m_Data)) {
-        printf("I DID SOME SHIT YEAHHHH");
-     } // TODO - MOVE CONSTRUCTOR
+    } // TODO - MOVE CONSTRUCTOR
 
     Matrix(const std::array<int, r * c>& arr){
         std::copy(arr.begin(), arr.end(), m_Data.begin());
@@ -56,13 +55,10 @@ struct Matrix{
         for(auto it_r = ini.begin() ; it_r != ini.end() ; it_r++){
             for(auto it_c = it_r->begin() ; it_c != it_r->end() ; it_c++){
                 m_Data[pos] = *(it_c);
-                //std::cout << m_Data[pos] << "\t";
                 pos++;
             }
         }
-        //std::cout << "\n";
-
-        printf("Initializer\n");
+       
 
     }
 
@@ -99,11 +95,6 @@ struct Matrix{
         if(index >= r){printf("BAD ROW SIZE\n");}
         return SubMat((&m_Data[0] + (r * index)), c);
     }
-
-
-
-
-
 
 
 };
