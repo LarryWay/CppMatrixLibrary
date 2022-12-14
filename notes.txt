@@ -1,0 +1,2 @@
+Move constructor cannot be made with an std::array
+
